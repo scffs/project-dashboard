@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://vercel.com/mystic-lab/v0-project-management-tool-xp"><strong>Live demo</strong></a>
+  <a href="https://v0-project-workspace.vercel.app"><strong>Live demo</strong></a>
   ·
   <a href="#getting-started"><strong>Run locally</strong></a>
   ·
@@ -35,7 +35,7 @@ If you are a founder, indie hacker, or engineer evaluating collaboration, this r
 
 The dashboard is deployed on Vercel:
 
-- **Production**: https://vercel.com/mystic-lab/v0-project-management-tool-xp
+- **Production**: https://v0-project-workspace.vercel.app
 
 > Note: This is a UI‑first demo. It uses mocked data and does not include authentication or a backend API.
 
