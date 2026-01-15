@@ -97,6 +97,36 @@ export type QuickLink = {
   url: string
 }
 
+export type NoteType = "general" | "meeting" | "audio"
+export type NoteStatus = "completed" | "processing"
+
+export type TranscriptSegment = {
+  id: string
+  speaker: string
+  timestamp: string
+  text: string
+}
+
+export type AudioNoteData = {
+  duration: string
+  fileName: string
+  aiSummary: string
+  keyPoints: string[]
+  insights: string[]
+  transcript: TranscriptSegment[]
+}
+
+export type ProjectNote = {
+  id: string
+  title: string
+  content?: string
+  noteType: NoteType
+  status: NoteStatus
+  addedDate: Date
+  addedBy: User
+  audioData?: AudioNoteData
+}
+
 export type ProjectDetails = {
   id: string
   name: string
@@ -110,6 +140,7 @@ export type ProjectDetails = {
   time: TimeSummary
   backlog: BacklogSummary
   quickLinks: QuickLink[]
+  notes: ProjectNote[]
   source?: ProjectListItem
 }
 
@@ -257,6 +288,111 @@ function baseDetailsFromListItem(p: ProjectListItem): ProjectDetails {
       supportUsers: [userFromName("Support", "Support")],
     },
     quickLinks: [],
+    notes: [
+      {
+        id: `${p.id}-note-1`,
+        title: "Project review",
+        noteType: "audio",
+        status: "completed",
+        addedDate: new Date(2025, 6, 12),
+        addedBy: picUsers[0],
+        audioData: {
+          duration: "00:02:21",
+          fileName: "project-review-meeting.mp3",
+          aiSummary: "The meeting involved a review of ongoing projects and the planning of next steps. The team discussed user testing for the week to gather feedback before deciding on new features and tasks for the next phase. Contract payments and design considerations for the landing page were also addressed.",
+          keyPoints: [
+            "User testing scheduled for this week",
+            "New features to be decided after feedback",
+            "Contract payment timeline confirmed",
+            "Landing page design in progress",
+          ],
+          insights: [
+            "Team alignment on priorities is strong",
+            "Need more clarity on feature scope",
+            "Design review needed before development",
+          ],
+          transcript: [
+            { id: "t1", speaker: "SPK_1", timestamp: "0:00", text: "Co-founder should be joining on in a sec, but I kind of caught him up to speed on what we talked about last time." },
+            { id: "t2", speaker: "SPK_2", timestamp: "0:15", text: "Kind of where Bino is, what type of help we ideally are looking for and then you know, if you are interested, a type of work trial moving forward, what that would look like." },
+            { id: "t3", speaker: "SPK_1", timestamp: "0:22", text: "So today, really hoping to kind of go through some of those details and also like, if you have any insights on Bino as well as some design and suggestions that you have, we'd love to kind of talk through those as well." },
+            { id: "t4", speaker: "SPK_2", timestamp: "0:38", text: "Okay, sure." },
+            { id: "t5", speaker: "SPK_3", timestamp: "0:43", text: "Sounds good." },
+            { id: "t6", speaker: "SPK_1", timestamp: "0:55", text: "So yeah, we can give him a sec." },
+            { id: "t7", speaker: "SPK_2", timestamp: "1:00", text: "I think he should be drawing, but he doesn't." },
+          ],
+        },
+      },
+      {
+        id: `${p.id}-note-2`,
+        title: "Meeting note",
+        noteType: "meeting",
+        status: "completed",
+        addedDate: new Date(2024, 8, 18),
+        addedBy: picUsers[0],
+        content:
+          "Discussion about current sprint goals, open issues, and next steps for the design handoff.",
+      },
+      {
+        id: `${p.id}-note-3`,
+        title: "Client feedback",
+        noteType: "general",
+        status: "completed",
+        addedDate: new Date(2024, 8, 18),
+        addedBy: picUsers[0],
+        content:
+          "Client shared feedback on the latest homepage iteration. Main concern is clarity of the hero copy.",
+      },
+      {
+        id: `${p.id}-note-4`,
+        title: "Internal brainstorm",
+        noteType: "general",
+        status: "completed",
+        addedDate: new Date(2024, 8, 17),
+        addedBy: picUsers[0],
+        content:
+          "Ideas for onboarding improvements, including checklists, progress indicators, and inline tips.",
+      },
+      {
+        id: `${p.id}-note-5`,
+        title: "Hero Description",
+        noteType: "general",
+        status: "completed",
+        addedDate: new Date(2024, 8, 17),
+        addedBy: picUsers[0],
+        content:
+          "Copy options for the hero section headline and supporting description for A/B testing.",
+      },
+      {
+        id: `${p.id}-note-6`,
+        title: "Trade-off",
+        noteType: "meeting",
+        status: "processing",
+        addedDate: new Date(2024, 8, 17),
+        addedBy: picUsers[0],
+        content:
+          "Notes about trade-offs between performance and flexibility for the new dashboard widgets.",
+      },
+      {
+        id: `${p.id}-note-7`,
+        title: "Roadmap",
+        noteType: "general",
+        status: "completed",
+        addedDate: new Date(2024, 8, 16),
+        addedBy: picUsers[0],
+        content:
+          "High-level roadmap for the next two quarters focusing on analytics and collaboration features.",
+      },
+      {
+        id: `${p.id}-note-8`,
+        title: "Brainstorm",
+        noteType: "general",
+        status: "completed",
+        addedDate: new Date(2024, 8, 16),
+        addedBy: picUsers[0],
+        content:
+          "Rough brainstorming around potential integrations and automation opportunities.",
+      },
+    ],
     source: p,
   }
 }

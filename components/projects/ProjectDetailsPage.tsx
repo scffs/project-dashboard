@@ -16,6 +16,7 @@ import { TimelineGantt } from "@/components/projects/TimelineGantt"
 import { RightMetaPanel } from "@/components/projects/RightMetaPanel"
 import { WorkstreamTab } from "@/components/projects/WorkstreamTab"
 import { ProjectTasksTab } from "@/components/projects/ProjectTasksTab"
+import { NotesTab } from "@/components/projects/NotesTab"
 import { ProjectWizard } from "@/components/project-wizard/ProjectWizard"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
@@ -120,82 +121,80 @@ export function ProjectDetailsPage({ projectId }: ProjectDetailsPageProps) {
         <div className="px-4">
           <div className="mx-auto w-full max-w-7xl">
 
-          <div
-            className={
-              "mt-0 grid grid-cols-1 gap-15 " +
-              (showMeta
-                ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,320px)]"
-                : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0px)]")
-            }
-          >
-            <div className="space-y-6 pt-4">
-              <ProjectHeader project={project} onEditProject={openWizard} />
+            <div
+              className={
+                "mt-0 grid grid-cols-1 gap-15 " +
+                (showMeta
+                  ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,320px)]"
+                  : "lg:grid-cols-[minmax(0,1fr)_minmax(0,0px)]")
+              }
+            >
+              <div className="space-y-6 pt-4">
+                <ProjectHeader project={project} onEditProject={openWizard} />
 
-              <Tabs defaultValue="overview">
-                <TabsList className="w-full gap-6">
-                  <TabsTrigger value="overview">Overview</TabsTrigger>
-                  <TabsTrigger value="workstream">Workstream</TabsTrigger>
-                  <TabsTrigger value="tasks">Tasks</TabsTrigger>
-                  <TabsTrigger value="notes">Notes</TabsTrigger>
-                  <TabsTrigger value="assets">Assets &amp; Files</TabsTrigger>
-                </TabsList>
+                <Tabs defaultValue="overview">
+                  <TabsList className="w-full gap-6">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="workstream">Workstream</TabsTrigger>
+                    <TabsTrigger value="tasks">Tasks</TabsTrigger>
+                    <TabsTrigger value="notes">Notes</TabsTrigger>
+                    <TabsTrigger value="assets">Assets &amp; Files</TabsTrigger>
+                  </TabsList>
 
-                <TabsContent value="overview">
-                  <div className="space-y-10">
-                    <p className="text-sm leading-6 text-muted-foreground">{project.description}</p>
-                    <ScopeColumns scope={project.scope} />
-                    <OutcomesList outcomes={project.outcomes} />
-                    <KeyFeaturesColumns features={project.keyFeatures} />
-                    <TimelineGantt tasks={project.timelineTasks} />
-                  </div>
-                </TabsContent>
+                  <TabsContent value="overview">
+                    <div className="space-y-10">
+                      <p className="text-sm leading-6 text-muted-foreground">{project.description}</p>
+                      <ScopeColumns scope={project.scope} />
+                      <OutcomesList outcomes={project.outcomes} />
+                      <KeyFeaturesColumns features={project.keyFeatures} />
+                      <TimelineGantt tasks={project.timelineTasks} />
+                    </div>
+                  </TabsContent>
 
-                <TabsContent value="workstream">
-                  <WorkstreamTab workstreams={project.workstreams} />
-                </TabsContent>
+                  <TabsContent value="workstream">
+                    <WorkstreamTab workstreams={project.workstreams} />
+                  </TabsContent>
 
-                <TabsContent value="tasks">
-                  <ProjectTasksTab project={project} />
-                </TabsContent>
+                  <TabsContent value="tasks">
+                    <ProjectTasksTab project={project} />
+                  </TabsContent>
 
-                <TabsContent value="notes">
-                  <div className="rounded-lg border border-dashed border-border/70 bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-                    Notes are upcoming.
-                  </div>
-                </TabsContent>
+                  <TabsContent value="notes">
+                    <NotesTab notes={project.notes || []} />
+                  </TabsContent>
 
-                <TabsContent value="assets">
-                  <div className="rounded-lg border border-dashed border-border/70 bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
-                    Assets &amp; Files section is upcoming.
-                  </div>
-                </TabsContent>
-              </Tabs>
+                  <TabsContent value="assets">
+                    <div className="rounded-lg border border-dashed border-border/70 bg-muted/30 px-4 py-10 text-center text-sm text-muted-foreground">
+                      Assets &amp; Files section is upcoming.
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
+              <AnimatePresence initial={false}>
+                {showMeta && (
+                  <motion.div
+                    key="meta-panel"
+                    initial={{ x: 80, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    exit={{ x: 80, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                    className="lg:border-l lg:border-border lg:pl-6"
+                  >
+                    <RightMetaPanel project={project} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-
-            <AnimatePresence initial={false}>
-              {showMeta && (
-                <motion.div
-                  key="meta-panel"
-                  initial={{ x: 80, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: 80, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                  className="lg:border-l lg:border-border lg:pl-6"
-                >
-                  <RightMetaPanel project={project} />
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
+
+        <Separator className="mt-auto" />
+
+        {isWizardOpen && (
+          <ProjectWizard onClose={closeWizard} onCreate={closeWizard} />
+        )}
       </div>
-
-      <Separator className="mt-auto" />
-
-      {isWizardOpen && (
-        <ProjectWizard onClose={closeWizard} onCreate={closeWizard} />
-      )}
-    </div>
     </div>
   )
 }
